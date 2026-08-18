@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>HTTP Proxy</title>
+
+    <style>
+        body {
+            width: 280px;
+            padding: 15px;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 7px;
+        }
+
+        button {
+            width: 100%;
+            padding: 9px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h3>HTTP Proxy</h3>
+
+<label for="host">Server</label>
+<input
+        id="host"
+        type="text"
+        placeholder="123.123.123.123"
+>
+
+<label for="port">Port</label>
+<input
+        id="port"
+        type="number"
+        value="3128"
+>
+
+<label for="username">Username</label>
+<input
+        id="username"
+        type="text"
+        value="proxyuser"
+>
+
+<label for="password">Password</label>
+<input
+        id="password"
+        type="password"
+>
+
+<button id="connect">Включить</button>
+<button id="disconnect">Выключить</button>
+
+<div id="status">Проверка...</div>
+
+<script src="popup.js"></script>
+
+</body>
+</html>

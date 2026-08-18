@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "HTTP Proxy",
+    "version": "1.1.0",
+    "description": "HTTP Proxy for Chrome",
+    "permissions": [
+        "proxy",
+        "storage",
+        "webRequest",
+        "webRequestAuthProvider"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
