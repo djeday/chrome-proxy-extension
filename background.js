@@ -6,7 +6,6 @@ let proxyState = {
     password: ''
 };
 
-// requestId -> number of auth attempts
 const authAttempts = new Map();
 
 async function loadState() {
@@ -104,9 +103,7 @@ async function restoreProxyState() {
     }
 }
 
-/*
- * Extension/service worker startup
- */
+
 restoreProxyState();
 
 /*
@@ -148,35 +145,25 @@ chrome.storage.onChanged.addListener((changes) => {
     }
 });
 
-/*
- * Automatic proxy authentication.
- *
- * Important:
- * details.isProxy === true means this is
- * Proxy-Authenticate / HTTP proxy auth.
- */
+
 chrome.webRequest.onAuthRequired.addListener(
     (details, callback) => {
         try {
-            // Ignore normal website authentication.
             if (!details.isProxy) {
                 callback({});
                 return;
             }
 
-            // Proxy must currently be enabled.
             if (!proxyState.enabled) {
                 callback({});
                 return;
             }
 
-            // Check challenger exists.
             if (!details.challenger) {
                 callback({});
                 return;
             }
 
-            // Only answer for our proxy.
             if (
                 details.challenger.host !== proxyState.host ||
                 Number(details.challenger.port) !== Number(proxyState.port)
@@ -185,16 +172,27 @@ chrome.webRequest.onAuthRequired.addListener(
                 return;
             }
 
-            // Credentials must exist.
-            if (!proxyState.username || !proxyState.password) {
+            if (
+                !proxyState.username &&
+                !proxyState.password
+            ) {
                 callback({});
                 return;
             }
 
-            /*
-             * Prevent endless retries on bad credentials.
-             */
-            const attempts = authAttempts.get(details.requestId) || 0;
+            if (
+                !proxyState.username ||
+                !proxyState.password
+            ) {
+                callback({
+                    cancel: true
+                });
+
+                return;
+            }
+
+            const attempts =
+                authAttempts.get(details.requestId) || 0;
 
             if (attempts >= 2) {
                 console.warn(
@@ -203,6 +201,7 @@ chrome.webRequest.onAuthRequired.addListener(
                 );
 
                 authAttempts.delete(details.requestId);
+
                 callback({
                     cancel: true
                 });
@@ -210,7 +209,10 @@ chrome.webRequest.onAuthRequired.addListener(
                 return;
             }
 
-            authAttempts.set(details.requestId, attempts + 1);
+            authAttempts.set(
+                details.requestId,
+                attempts + 1
+            );
 
             callback({
                 authCredentials: {
@@ -220,7 +222,10 @@ chrome.webRequest.onAuthRequired.addListener(
             });
 
         } catch (error) {
-            console.error('onAuthRequired error:', error);
+            console.error(
+                'onAuthRequired error:',
+                error
+            );
 
             callback({
                 cancel: true
@@ -233,10 +238,6 @@ chrome.webRequest.onAuthRequired.addListener(
     ['asyncBlocking']
 );
 
-/*
- * Request completed successfully.
- * Remove auth attempt counter.
- */
 chrome.webRequest.onCompleted.addListener(
     (details) => {
         authAttempts.delete(details.requestId);
@@ -246,10 +247,6 @@ chrome.webRequest.onCompleted.addListener(
     }
 );
 
-/*
- * Request failed.
- * Remove auth attempt counter.
- */
 chrome.webRequest.onErrorOccurred.addListener(
     (details) => {
         authAttempts.delete(details.requestId);

@@ -1,19 +1,97 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>HTTP Proxy</title>
 
     <style>
         body {
-            width: 280px;
+            width: 320px;
             padding: 15px;
             margin: 0;
             font-family: Arial, sans-serif;
+            box-sizing: border-box;
         }
 
         h3 {
-            margin-top: 0;
+            margin: 0 0 12px;
+        }
+
+        h4 {
+            margin: 18px 0 8px;
+        }
+
+        .proxy-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .proxy-item {
+            display: flex;
+            align-items: center;
+            padding: 9px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+        }
+
+        .proxy-item:hover {
+            background: #f5f5f5;
+            border-color: #aaa;
+        }
+
+        .proxy-item.active {
+            border-color: #007bff;
+            background: #f0f7ff;
+        }
+
+        .proxy-flag {
+            width: 32px;
+            height: 22px;
+            object-fit: cover;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .proxy-info {
+            min-width: 0;
+        }
+
+        .proxy-country {
+            font-weight: bold;
+            line-height: 18px;
+        }
+
+        .proxy-host {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .proxy-ip {
+            color: #555;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .message {
+            color: #777;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .error {
+            color: #dc3545;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .message a {
+            display: inline-block;
+            margin-top: 6px;
         }
 
         label {
@@ -35,17 +113,68 @@
             cursor: pointer;
         }
 
+        #toggleProxy.enabled {
+            background: #dc3545;
+            color: #fff;
+            border: 1px solid #dc3545;
+        }
+
+        #toggleProxy.disabled {
+            background: #28a745;
+            color: #fff;
+            border: 1px solid #28a745;
+        }
+
         #status {
             margin-top: 12px;
             text-align: center;
             font-weight: bold;
         }
+
+        .top-nav {
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .top-nav a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .top-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .get-proxy-button {
+            margin-top: 10px;
+            background: #007bff;
+            color: #fff;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+        }
+
+        .get-proxy-button:hover {
+            background: #0069d9;
+            border-color: #0069d9;
+        }
     </style>
 </head>
 
 <body>
-
 <h3>HTTP Proxy</h3>
+
+<h4>My Proxies</h4>
+
+<div id="proxy-list" class="proxy-list">
+    <div class="message">Loading...</div>
+</div>
+<div class="top-nav">
+    <a href="#" id="moreProxy">More Proxies</a>
+</div>
+
+<h4>Proxy Settings</h4>
 
 <label for="host">Server</label>
 <input
@@ -65,7 +194,7 @@
 <input
         id="username"
         type="text"
-        value="proxyuser"
+        placeholder="proxyuser"
 >
 
 <label for="password">Password</label>
@@ -74,11 +203,13 @@
         type="password"
 >
 
-<button id="connect">Включить</button>
-<button id="disconnect">Выключить</button>
+<button id="toggleProxy" class="disabled">
+    Enable
+</button>
 
-<div id="status">Проверка...</div>
+<div id="status">Checking...</div>
 
+<script src="jquery-3.6.0.min.js"></script>
 <script src="popup.js"></script>
 
 </body>
