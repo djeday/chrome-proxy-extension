@@ -61,6 +61,11 @@ async function loadProxies() {
             // Ignore invalid JSON
         }
 
+        if (response.status === 401) {
+            showProxyLink('No active proxies.');
+            return;
+        }
+
         if (!response.ok) {
             throw new Error(
                 data?.message || `HTTP ${response.status}`
@@ -112,8 +117,6 @@ function showProxyLink(message) {
             await chrome.tabs.update(tabs[0].id, {
                 url: PROXY_PAGE
             });
-
-            window.close();
 
         } catch (error) {
             console.error('Failed to open proxy page:', error);
@@ -368,8 +371,6 @@ $('#moreProxy').on('click', async function (event) {
         await chrome.tabs.update(tabs[0].id, {
             url: PROXY_PAGE
         });
-
-        window.close();
 
     } catch (error) {
         console.error('Failed to open proxy page:', error);

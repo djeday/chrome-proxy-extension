@@ -1,9 +1,14 @@
 {
     "manifest_version": 3,
-    "name": "HTTP Proxy",
-    "version": "1.1.0",
+    "name": "UProxy",
+    "version": "1.0.0",
     "description": "HTTP Proxy for Chrome",
-    "privacy_policy": "https://vpn.udfsoft.com/proxy/privacy-policy",
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
     "permissions": [
         "proxy",
         "storage",
@@ -11,7 +16,7 @@
         "webRequestAuthProvider"
     ],
     "host_permissions": [
-        "<all_urls>"
+        "https://vpn.udfsoft.com/*"
     ],
     "background": {
         "service_worker": "background.js"
