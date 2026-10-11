@@ -7,36 +7,83 @@
     <title>HTTP Proxy</title>
 
     <style>
+        html,
         body {
-            width: 320px;
-            padding: 15px;
+            width: 300px;
+            height: 600px;
+
             margin: 0;
+            padding: 0;
+
+            overflow: hidden;
+
             font-family: Arial, sans-serif;
             box-sizing: border-box;
         }
 
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fff;
+        }
+
+        .popup {
+            width: 300px;
+            height: 600px;
+
+            padding: 15px;
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+        }
+
         h3 {
+            flex: 0 0 auto;
+
             margin: 0 0 12px;
         }
 
         h4 {
-            margin: 18px 0 8px;
+            flex: 0 0 auto;
+
+            margin: 0 0 8px;
         }
 
         .proxy-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            flex: 1 1 auto;
+
+            min-height: 0;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding-right: 4px;
         }
 
         .proxy-item {
             display: flex;
             align-items: center;
+
+            width: 100%;
+
             padding: 9px;
+
+            margin-bottom: 6px;
+
             border: 1px solid #ddd;
             border-radius: 6px;
+
             cursor: pointer;
-            transition: background .15s, border-color .15s;
+
+            transition:
+                    background .15s,
+                    border-color .15s;
         }
 
         .proxy-item:hover {
@@ -50,152 +97,360 @@
         }
 
         .proxy-flag {
+            flex: 0 0 auto;
+
             width: 32px;
             height: 22px;
+
             object-fit: cover;
+
             margin-right: 10px;
+
             border-radius: 2px;
         }
 
         .proxy-info {
             min-width: 0;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .proxy-type {
+            flex: 0 0 auto;
+
+            padding: 3px 5px;
+
+            border-radius: 4px;
+
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .proxy-type.premium {
+            color: #856404;
+            background: #fff3cd;
+            border: 1px solid #ffe08a;
+        }
+
+        .proxy-type.free {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
         }
 
         .proxy-country {
             font-weight: bold;
             line-height: 18px;
-        }
 
-        .proxy-host {
-            color: #777;
-            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .proxy-ip {
             color: #555;
             font-size: 12px;
+
             margin-top: 2px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .message {
             color: #777;
+
             text-align: center;
+
             padding: 10px 0;
         }
 
         .error {
             color: #dc3545;
+
             text-align: center;
+
             padding: 10px 0;
         }
 
-        .message a {
-            display: inline-block;
-            margin-top: 6px;
-        }
-
-        label {
-            display: block;
-            margin-top: 8px;
-            margin-bottom: 4px;
-        }
-
-        input {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 7px;
-        }
-
-        button {
-            width: 100%;
-            padding: 9px;
-            margin-top: 8px;
-            cursor: pointer;
-        }
-
-        #toggleProxy.enabled {
-            background: #dc3545;
-            color: #fff;
-            border: 1px solid #dc3545;
-        }
-
-        #toggleProxy.disabled {
-            background: #28a745;
-            color: #fff;
-            border: 1px solid #28a745;
-        }
-
-        #status {
-            margin-top: 12px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .top-nav {
-            text-align: center;
-            margin-bottom: 10px;
-            margin-top: 10px;
-        }
-
-        .top-nav a {
-            color: #007bff;
-            text-decoration: none;
-            font-size: 13px;
-        }
-
-        .top-nav a:hover {
-            text-decoration: underline;
-        }
-
         .get-proxy-button {
+            width: 100%;
+
             margin-top: 10px;
+
+            padding: 9px;
+
             background: #007bff;
             color: #fff;
+
             border: 1px solid #007bff;
             border-radius: 4px;
+
+            cursor: pointer;
         }
 
         .get-proxy-button:hover {
             background: #0069d9;
             border-color: #0069d9;
         }
+
+        .bottom-panel {
+            flex: 0 0 auto;
+
+            padding-top: 10px;
+
+            background: #fff;
+        }
+
+        .bottom-actions {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            min-height: 34px;
+        }
+
+
+        .more-proxy-button {
+            width: auto;
+
+            margin: 0;
+            padding: 7px 12px;
+
+            background: #007bff;
+            color: #fff;
+
+            border: 1px solid #007bff;
+            border-radius: 4px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        .more-proxy-button:hover {
+            background: #0069d9;
+            border-color: #0069d9;
+        }
+
+
+        .settings-button {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 34px;
+            height: 34px;
+
+            margin: 0;
+            padding: 0;
+
+            background: #fff;
+
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .settings-button:hover {
+            background: #f5f5f5;
+        }
+
+
+        #proxy-settings-form {
+            display: none;
+
+            padding-top: 8px;
+        }
+
+        label {
+            display: block;
+
+            margin-top: 8px;
+            margin-bottom: 4px;
+
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 7px;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+
+        .connect-button {
+            width: 100%;
+
+            margin-top: 10px;
+
+            padding: 9px;
+
+            background: #28a745;
+            color: #fff;
+
+            border: 1px solid #28a745;
+            border-radius: 4px;
+
+            cursor: pointer;
+        }
+
+        .connect-button:hover {
+            background: #218838;
+            border-color: #218838;
+        }
+
+
+        .disconnect-button {
+            width: 100%;
+
+            margin-top: 8px;
+
+            padding: 9px;
+
+            background: #dc3545;
+            color: #fff;
+
+            border: 1px solid #dc3545;
+            border-radius: 4px;
+
+            cursor: pointer;
+        }
+
+        .disconnect-button:hover {
+            background: #c82333;
+            border-color: #c82333;
+        }
+
+
+        #status {
+            min-height: 16px;
+
+            margin-top: 8px;
+
+            text-align: center;
+
+            font-weight: bold;
+            font-size: 13px;
+        }
     </style>
 </head>
 
 <body>
-<h3>UProxy</h3>
 
-<h4>My Proxies</h4>
+<div class="popup">
 
-<div id="proxy-list" class="proxy-list">
-    <div class="message">Loading...</div>
+    <h3>UProxy</h3>
+
+    <h4>My Proxies</h4>
+
+    <div id="proxy-list" class="proxy-list">
+        <div class="message">
+            Loading...
+        </div>
+    </div>
+
+    <div class="bottom-panel">
+
+        <div class="bottom-actions">
+
+            <button
+                    type="button"
+                    id="moreProxy"
+                    class="more-proxy-button"
+            >
+                More Proxies
+            </button>
+
+            <button
+                    type="button"
+                    id="settingsButton"
+                    class="settings-button"
+                    title="Settings"
+            >
+                ⚙
+            </button>
+
+        </div>
+
+        <div id="proxy-settings-form">
+
+            <label for="host">
+                Server
+            </label>
+
+            <input
+                    id="host"
+                    type="text"
+                    placeholder="123.123.123.123"
+            >
+
+            <label for="port">
+                Port
+            </label>
+
+            <input
+                    id="port"
+                    type="number"
+                    value="3128"
+            >
+
+            <label for="username">
+                Username
+            </label>
+
+            <input
+                    id="username"
+                    type="text"
+                    placeholder="proxyuser"
+            >
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                    id="password"
+                    type="password"
+            >
+
+            <button
+                    id="connectManual"
+                    type="button"
+                    class="connect-button"
+            >
+                Connect
+            </button>
+
+        </div>
+
+        <button
+                id="toggleProxy"
+                type="button"
+                class="disconnect-button"
+                style="display: none;"
+        >
+            Disconnect
+        </button>
+
+        <div id="status"></div>
+
+    </div>
+
 </div>
-<div class="top-nav">
-    <a href="#" id="moreProxy">More Proxies</a>
-</div>
-
-<h4>Proxy Settings</h4>
-
-<label for="host">Server</label>
-<input id="host" type="text" placeholder="123.123.123.123">
-
-<label for="port">Port</label>
-<input id="port" type="number" value="3128">
-
-<label for="username">Username</label>
-<input id="username" type="text" placeholder="proxyuser">
-
-<label for="password">Password</label>
-<input id="password" type="password">
-
-<button id="toggleProxy" class="disabled">
-    Enable
-</button>
-
-<div id="status">Checking...</div>
 
 <script src="jquery-3.6.0.min.js"></script>
-<script src="popup.js"></script>
+<script src="popup.js?v=1.4"></script>
 
 </body>
 </html>
